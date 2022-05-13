@@ -32,11 +32,10 @@ pipeline {
                 sh "docker rmi $registry:$BUILD_NUMBER" 
             }
         }
-	      stage('Deploy') { 
-            steps { 
-                sh "DOCKER_IMAGE=$registry:$BUILD_NUMBER"
-                sh "docker pull $DOCKER_IMAGE"
-                sh "docker run -d -p 8081:8080 $DOCKER_IMAGE" 
+	      stage('Deploy') {
+            docker.withRegistry( '', registryCredential ) {
+                dockerImage = docker.image(registry + ":$BUILD_NUMBER")
+                sh "docker pull ${dockerImage.imageName()}"
             }
         }
     }
