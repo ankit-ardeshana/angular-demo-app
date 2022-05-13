@@ -38,6 +38,7 @@ pipeline {
                     docker.withRegistry( '', registryCredential ) {
                         dockerImage = docker.image(registry + ":$BUILD_NUMBER")
                         sh "docker pull ${dockerImage.imageName()}"
+                        sh "docker run -d -p 8081:8080 ${dockerImage.imageName()}"
                     }
                 }
             }
