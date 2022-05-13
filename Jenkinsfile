@@ -33,9 +33,13 @@ pipeline {
             }
         }
 	      stage('Deploy') {
-            docker.withRegistry( '', registryCredential ) {
-                dockerImage = docker.image(registry + ":$BUILD_NUMBER")
-                sh "docker pull ${dockerImage.imageName()}"
+            steps { 
+                script {
+                    docker.withRegistry( '', registryCredential ) {
+                        dockerImage = docker.image(registry + ":$BUILD_NUMBER")
+                        sh "docker pull ${dockerImage.imageName()}"
+                    }
+                }
             }
         }
     }
